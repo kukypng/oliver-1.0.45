@@ -88,7 +88,7 @@ export const BudgetsList = ({
                     </div>
                   </TableHead>
                   <TableHead className="font-bold text-foreground">Dispositivo</TableHead>
-                  <TableHead className="font-bold text-foreground">Problema</TableHead>
+                  <TableHead className="font-bold text-foreground">Serviço</TableHead>
                   <TableHead className="font-bold text-foreground">Valor</TableHead>
                   <TableHead className="font-bold text-foreground">Data</TableHead>
                   <TableHead className="font-bold text-foreground text-center">Ações</TableHead>
