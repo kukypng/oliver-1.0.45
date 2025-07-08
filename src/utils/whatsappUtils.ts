@@ -61,7 +61,8 @@ Aparelho: *${budget.device_model}*
 ${priceSection}
 
 *DETALHES*
-Serviço: ${budget.part_type}${serviceSpecification}
+Serviço: ${budget.part_type}
+Obs: ${serviceSpecification}
 Garantia de: ${warrantyText}
 
 *Garantia não cobre quebrado ou molhado*${additionalServices}`;
