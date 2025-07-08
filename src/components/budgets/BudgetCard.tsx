@@ -112,7 +112,7 @@ export const BudgetCard = ({
 
         {/* Problema/Issue */}
         <div>
-          <p className="text-sm text-muted-foreground font-medium">Problema:</p>
+          <p className="text-sm text-muted-foreground font-medium">Serviço:</p>
           <p className="text-sm">{budget.issue || 'Problema não informado'}</p>
         </div>
 
