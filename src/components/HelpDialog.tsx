@@ -2,7 +2,7 @@ import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Zap, FileText, Settings, Users, BarChart2 } from 'lucide-react';
+import { Zap, FileText, Settings, Users, BarChart2, HelpCircle } from 'lucide-react';
 interface HelpDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -40,18 +40,50 @@ export const HelpDialog = ({
             Um guia rápido para você aproveitar ao máximo todas as funcionalidades.
           </DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col items-center text-center py-8 space-y-4">
-            <div className="text-6xl mb-4">🍪</div>
-            <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-foreground">
-                    Sistema de Ajuda em Desenvolvimento
-                </h3>
-                <p className="text-muted-foreground max-w-md">
-                    Desculpe, estamos trabalhando duro para criar o sistema de ajuda. Enquanto isso, você aceita um cookie? 🍪
+        <ScrollArea className="h-[400px] pr-4">
+          <div className="space-y-6">
+            {helpSections.map((section, index) => (
+              <div key={index} className="space-y-3">
+                <div className="flex items-center">
+                  {section.icon}
+                  <h3 className="text-lg font-semibold text-foreground">{section.title}</h3>
+                </div>
+                <p className="text-muted-foreground leading-relaxed pl-8">
+                  {section.description}
                 </p>
-                
+              </div>
+            ))}
+            
+            <div className="border-t pt-6 mt-8">
+              <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
+                <HelpCircle className="h-5 w-5 mr-3 text-primary" />
+                Perguntas Frequentes
+              </h3>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <h4 className="font-medium text-foreground">Como criar meu primeiro orçamento?</h4>
+                  <p className="text-sm text-muted-foreground">Acesse "Novo Orçamento" no menu, preencha os dados do cliente e dispositivo, adicione os serviços e valores desejados.</p>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="font-medium text-foreground">Como compartilhar orçamentos via WhatsApp?</h4>
+                  <p className="text-sm text-muted-foreground">Na lista de orçamentos, clique no botão do WhatsApp ao lado do orçamento desejado. O link será enviado automaticamente.</p>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="font-medium text-foreground">Como personalizar minha empresa nos orçamentos?</h4>
+                  <p className="text-sm text-muted-foreground">Vá em Configurações, depois Dados da Empresa e preencha suas informações. Elas aparecerão automaticamente em todos os orçamentos.</p>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="font-medium text-foreground">Como acompanhar o faturamento?</h4>
+                  <p className="text-sm text-muted-foreground">No Dashboard você vê o resumo do mês atual. Para relatórios detalhados, use a seção de Gestão de Dados.</p>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="font-medium text-foreground">O que significam os status dos orçamentos?</h4>
+                  <p className="text-sm text-muted-foreground">Rascunho (em criação), Enviado (compartilhado com cliente), Aprovado (cliente aceitou), Rejeitado (cliente recusou), Concluído (serviço finalizado).</p>
+                </div>
+              </div>
             </div>
-        </div>
+          </div>
+        </ScrollArea>
         <DialogFooter>
           <Button onClick={() => onOpenChange(false)}>Entendi</Button>
         </DialogFooter>
