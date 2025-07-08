@@ -47,6 +47,11 @@ export const generateWhatsAppMessage = (budget: BudgetData): string => {
     }
   }
 
+  let serviceSpecification = '';
+  if (budget.brand && budget.brand.trim()) {
+    serviceSpecification = `\nEspecificação: ${budget.brand}`;
+  }
+
   const message = `*Criado em: ${createdDate} | Válido até: ${validUntil}*
 
 *ORÇAMENTO*
@@ -56,7 +61,7 @@ Aparelho: *${budget.device_model}*
 ${priceSection}
 
 *DETALHES*
-Serviço: ${budget.part_type}
+Serviço: ${budget.part_type}${serviceSpecification}
 Garantia de: ${warrantyText}
 
 *Garantia não cobre quebrado ou molhado*${additionalServices}`;
