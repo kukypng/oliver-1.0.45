@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
 import { Loader2, Eye, EyeOff, AlertCircle } from 'lucide-react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 export const AuthPage = () => {
@@ -14,6 +14,7 @@ export const AuthPage = () => {
     user,
     loading: authLoading
   } = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [searchParams] = useSearchParams();
@@ -61,18 +62,19 @@ export const AuthPage = () => {
     }
   }, [searchParams]);
 
-  // Redirecionar usuários já logados
-  useEffect(() => {
-    if (!authLoading && user) {
-      window.location.href = '/dashboard';
-    }
-  }, [user, authLoading]);
+  // Usuários já logados serão redirecionados pelo AuthGuard
+  // Não fazemos redirecionamento aqui para evitar conflitos
 
-  // Mostrar loading se usuário já está logado ou buscando credenciais
-  if (authLoading || user) {
+  // Mostrar loading se ainda está carregando ou buscando credenciais
+  if (authLoading) {
     return <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-primary/5 to-primary/10">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>;
+  }
+
+  // Se usuário já está logado, será redirecionado pelo AuthGuard
+  if (user) {
+    return null;
   }
   if (isFetchingCreds) {
     return <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-primary/5 to-primary/10">
@@ -131,7 +133,7 @@ export const AuthPage = () => {
           </CardHeader>
           <CardContent className="text-center space-y-4">
             <p className="text-muted-foreground">{credentialError}</p>
-            <Button onClick={() => window.location.href = '/auth'} className="w-full">
+            <Button onClick={() => navigate('/auth', { replace: true })} className="w-full">
               Voltar para o Login
             </Button>
           </CardContent>

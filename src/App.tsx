@@ -7,7 +7,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AuthProvider } from "@/hooks/useAuth";
 import { useIOSOptimizations } from "@/hooks/useIOSOptimizations";
+import { useErrorRecovery } from "@/hooks/useErrorRecovery";
+import { useIOSScreenFix } from "@/hooks/useIOSScreenFix";
 import { IOSWebAppBadge } from "@/components/IOSWebAppBadge";
+import { IOSLayoutWrapper } from "@/components/IOSLayoutWrapper";
 import Index from "./pages/Index";
 import { AuthPage } from "./pages/AuthPage";
 import { SignUpPage } from "./pages/SignUpPage";
@@ -48,11 +51,22 @@ const queryClient = new QueryClient({
   },
 });
 
-const App = () => {
-  useIOSOptimizations();
-  
+const AppContent = () => {
+  useErrorRecovery({
+    clearCacheOnAuthError: true,
+    clearCacheOnNetworkError: true,
+    clearLocalStorageOnCriticalError: true,
+  });
+
+  // iOS screen fix for black screen issue
+  useIOSScreenFix({
+    enableViewportFix: true,
+    enableColorFix: true,
+    enableSafeAreaFix: true,
+    enablePreventLoop: true,
+  });
+
   return (
-    <QueryClientProvider client={queryClient}>
     <ThemeProvider
       attribute="class"
       defaultTheme="dark"
@@ -63,23 +77,24 @@ const App = () => {
         <ErrorBoundary>
           <BrowserRouter>
             <AuthProvider>
-              <Toaster />
-              <Sonner 
-                position="top-right"
-                expand={false}
-                richColors
-                closeButton
-                duration={4000}
-                toastOptions={{
-                  style: {
-                    background: 'hsl(var(--background))',
-                    color: 'hsl(var(--foreground))',
-                    border: '1px solid hsl(var(--border))',
-                  },
-                }}
-              />
-              <IOSWebAppBadge />
-              <Routes>
+              <IOSLayoutWrapper>
+                <Toaster />
+                <Sonner 
+                  position="top-right"
+                  expand={false}
+                  richColors
+                  closeButton
+                  duration={4000}
+                  toastOptions={{
+                    style: {
+                      background: 'hsl(var(--background))',
+                      color: 'hsl(var(--foreground))',
+                      border: '1px solid hsl(var(--border))',
+                    },
+                  }}
+                />
+                <IOSWebAppBadge />
+                <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<AuthPage />} />
                 <Route path="/plans" element={<PlansPage />} />
@@ -109,13 +124,23 @@ const App = () => {
                 />
                 <Route path="/cookie" element={<CookiePage />} />
                 <Route path="*" element={<NotFound />} />
-              </Routes>
+                </Routes>
+              </IOSLayoutWrapper>
             </AuthProvider>
           </BrowserRouter>
         </ErrorBoundary>
       </TooltipProvider>
     </ThemeProvider>
-  </QueryClientProvider>
+  );
+};
+
+const App = () => {
+  useIOSOptimizations();
+  
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AppContent />
+    </QueryClientProvider>
   );
 };
 

@@ -204,9 +204,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           title: 'Login realizado com sucesso!',
           description: 'Redirecionando...'
         });
-        setTimeout(() => {
-          window.location.href = '/dashboard';
-        }, 500);
       }
       
       return { error: null };

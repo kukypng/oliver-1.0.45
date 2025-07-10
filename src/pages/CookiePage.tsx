@@ -46,7 +46,10 @@ export const CookiePage = () => {
       {/* Footer com botão de voltar */}
       <div className="fixed bottom-4 right-4">
         <button 
-          onClick={() => window.location.href = '/'}
+          onClick={() => {
+            window.history.pushState({}, '', '/');
+            window.dispatchEvent(new PopStateEvent('popstate'));
+          }}
           className="flex items-center gap-2 px-4 py-2 bg-gray-900/80 border border-green-400/50 rounded-md backdrop-blur-sm hover:bg-green-900/20 transition-colors group"
         >
           <span className="text-green-400 text-sm">←</span>

@@ -35,7 +35,13 @@ export const ProtectedRoute = ({
         description="Você precisa estar logado para acessar esta página."
         action={{
           label: "Fazer Login",
-          onClick: () => window.location.href = '/login'
+          onClick: () => {
+            const navigate = window.history.pushState;
+            if (navigate) {
+              window.history.pushState({}, '', '/auth');
+              window.dispatchEvent(new PopStateEvent('popstate'));
+            }
+          }
         }}
       />
     );

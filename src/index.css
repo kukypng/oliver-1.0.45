@@ -120,29 +120,58 @@
     overflow-scrolling: touch;
   }
 
-  /* Mobile optimizations */
+  /* Critical iOS screen fix - prevents black screen */
   html {
     height: 100vh;
     height: -webkit-fill-available;
+    height: calc(var(--vh, 1vh) * 100);
+    width: 100%;
+    background-color: hsl(var(--background)) !important;
+    color: hsl(var(--foreground)) !important;
     overscroll-behavior: none;
-    scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
-  }
-
-  body {
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
-    overscroll-behavior: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
 
-  /* Prevent zoom on iOS */
+  body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    min-height: calc(var(--vh, 1vh) * 100);
+    background-color: hsl(var(--background)) !important;
+    color: hsl(var(--foreground)) !important;
+    overscroll-behavior: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    position: relative;
+    overflow-x: hidden;
+    /* Force GPU acceleration on iOS */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+  
+  /* iOS keyboard open state */
+  body.ios-keyboard-open {
+    height: calc(var(--actual-vh, 100vh));
+    position: fixed;
+    width: 100%;
+  }
+
+  /* Critical iOS input fixes - prevent zoom and styling issues */
   input, select, textarea, button {
-    font-size: 16px;
+    font-size: 16px !important;
     -webkit-appearance: none;
     border-radius: 0;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    background-color: inherit;
+    color: inherit;
+    /* Force proper color inheritance */
+    &::placeholder {
+      color: hsl(var(--muted-foreground));
+    }
   }
 
   @media screen and (max-width: 768px) {
@@ -184,7 +213,7 @@
     }
   }
 
-  /* Safe area support */
+  /* Enhanced Safe area support for iOS */
   @supports (padding: env(safe-area-inset-bottom)) {
     .pb-safe {
       padding-bottom: env(safe-area-inset-bottom);
@@ -192,6 +221,49 @@
     
     .pb-safe-bottom {
       padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+    }
+    
+    .pt-safe {
+      padding-top: env(safe-area-inset-top);
+    }
+    
+    .px-safe {
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+    }
+    
+    .ios-layout-wrapper {
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+    }
+  }
+
+  /* Fallback for older iOS versions */
+  @supports (padding: constant(safe-area-inset-bottom)) {
+    .pb-safe {
+      padding-bottom: constant(safe-area-inset-bottom);
+    }
+    
+    .pb-safe-bottom {
+      padding-bottom: calc(constant(safe-area-inset-bottom) + 1rem);
+    }
+    
+    .pt-safe {
+      padding-top: constant(safe-area-inset-top);
+    }
+    
+    .px-safe {
+      padding-left: constant(safe-area-inset-left);
+      padding-right: constant(safe-area-inset-right);
+    }
+    
+    .ios-layout-wrapper {
+      padding-top: constant(safe-area-inset-top);
+      padding-bottom: constant(safe-area-inset-bottom);
+      padding-left: constant(safe-area-inset-left);
+      padding-right: constant(safe-area-inset-right);
     }
   }
 }
