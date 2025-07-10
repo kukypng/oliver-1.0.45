@@ -9,7 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:shadow-medium shadow-soft before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-700",
+        default: "bg-primary text-primary-foreground hover:shadow-medium shadow-soft before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-700 mobile-touch ios-button",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-soft hover:shadow-medium active:scale-[0.97]",
         outline: "border border-border/50 bg-background/50 hover:bg-accent/50 hover:text-accent-foreground backdrop-blur-sm hover:border-primary/20",
         secondary: "bg-secondary/80 text-secondary-foreground hover:bg-secondary backdrop-blur-sm hover:shadow-soft",

@@ -25,8 +25,12 @@ export const MobileBottomNav = ({ activeTab, onTabChange, hasPermission }: Mobil
 
   return (
     <div 
-      className="fixed bottom-0 left-0 right-0 z-50 bg-card/98 backdrop-blur-xl border-t border-border/50"
-      style={{ paddingBottom: `${safeArea.bottom}px` }}
+      className="fixed bottom-0 left-0 right-0 z-50 bg-card/98 backdrop-blur-xl border-t border-border/50 ios-fix"
+      style={{ 
+        paddingBottom: `max(${safeArea.bottom}px, env(safe-area-inset-bottom, 0px))`,
+        paddingLeft: `max(env(safe-area-inset-left, 0px), 0px)`,
+        paddingRight: `max(env(safe-area-inset-right, 0px), 0px)`,
+      }}
     >
       <div className="flex items-center justify-around h-16 px-1">
         {navItems.map((item) => {
@@ -40,7 +44,7 @@ export const MobileBottomNav = ({ activeTab, onTabChange, hasPermission }: Mobil
               size="sm"
               onClick={() => onTabChange(item.id)}
               className={cn(
-                "flex-1 flex-col h-12 gap-0.5 relative transition-all duration-200 mx-0.5",
+                "flex-1 flex-col h-12 gap-0.5 relative transition-all duration-200 mx-0.5 mobile-touch ios-button",
                 item.isPrimary && "mx-1",
                 item.isPrimary 
                   ? "bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl shadow-medium" 

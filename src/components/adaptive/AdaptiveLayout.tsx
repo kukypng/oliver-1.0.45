@@ -77,14 +77,21 @@ export const AdaptiveLayout = ({ children, activeTab, onTabChange }: AdaptiveLay
   // Mobile layout - otimizado para ocupar 100% da tela
   return (
     <div 
-      className="min-h-screen flex flex-col bg-background w-full overflow-hidden"
+      className="min-h-screen flex flex-col bg-background w-full overflow-hidden ios-fix"
       style={{
-        paddingTop: `${safeArea.top}px`,
-        paddingLeft: `${safeArea.left}px`,
-        paddingRight: `${safeArea.right}px`,
+        paddingTop: `max(${safeArea.top}px, env(safe-area-inset-top, 0px))`,
+        paddingLeft: `max(${safeArea.left}px, env(safe-area-inset-left, 0px))`,
+        paddingRight: `max(${safeArea.right}px, env(safe-area-inset-right, 0px))`,
+        minHeight: '-webkit-fill-available',
       }}
     >
-      <main className="flex-1 overflow-y-auto w-full" style={{ paddingBottom: `calc(4rem + ${safeArea.bottom}px)` }}>
+      <main 
+        className="flex-1 overflow-y-auto w-full ios-scroll" 
+        style={{ 
+          paddingBottom: `calc(4rem + max(${safeArea.bottom}px, env(safe-area-inset-bottom, 0px)))`,
+          WebkitOverflowScrolling: 'touch' as any
+        }}
+      >
         <div className="w-full min-h-full">
           {children}
         </div>
