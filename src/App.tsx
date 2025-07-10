@@ -21,6 +21,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import { ResetEmailPage } from "./pages/ResetEmailPage";
 import { VerifyPage } from "./pages/VerifyPage";
+import { BudgetsPage } from "./pages/BudgetsPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -98,6 +99,14 @@ const App = () => {
                   element={<SignUpPage />}
                 />
                 <Route path="/dashboard/*" element={<Dashboard />} />
+                <Route
+                  path="/budgets"
+                  element={
+                    <ProtectedRoute>
+                      <BudgetsPage />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route path="/cookie" element={<CookiePage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
