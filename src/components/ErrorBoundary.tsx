@@ -1,7 +1,7 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { AlertTriangle, RefreshCw, Trash2 } from 'lucide-react';
+import { AlertTriangle, RefreshCw } from 'lucide-react';
 interface Props {
   children?: ReactNode;
   fallback?: ReactNode;
@@ -22,35 +22,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('Uncaught error:', error, errorInfo);
-    
-    // Check if this is a critical error that requires cache clearing
-    const isCriticalError = error.message?.includes('loop') ||
-                           error.message?.includes('recursion') ||
-                           error.message?.includes('Maximum call stack') ||
-                           error.stack?.includes('AuthGuard') ||
-                           error.stack?.includes('useAuth');
-    
-    if (isCriticalError) {
-      this.clearApplicationData();
-    }
   }
-
-  private clearApplicationData = () => {
-    console.log('🧹 Limpando dados da aplicação devido a erro crítico...');
-    
-    // Clear localStorage (keep only essential data)
-    const keysToKeep = ['theme', 'language'];
-    const storage = { ...localStorage };
-    localStorage.clear();
-    keysToKeep.forEach(key => {
-      if (storage[key]) {
-        localStorage.setItem(key, storage[key]);
-      }
-    });
-    
-    // Clear sessionStorage
-    sessionStorage.clear();
-  };
   private handleRetry = () => {
     this.setState({
       hasError: false,
@@ -81,29 +53,8 @@ export class ErrorBoundary extends Component<Props, State> {
                   Tentar Novamente
                 </Button>
                 
-                <Button 
-                  variant="outline" 
-                  onClick={() => {
-                    this.clearApplicationData();
-                    // iOS-safe reload
-                    setTimeout(() => {
-                      window.history.pushState({}, '', '/');
-                      window.dispatchEvent(new PopStateEvent('popstate'));
-                    }, 100);
-                  }} 
-                  className="w-full"
-                >
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Limpar Cache e Recarregar
-                </Button>
-                
-                <Button variant="secondary" onClick={() => {
-                  // iOS-safe reload
-                  window.history.pushState({}, '', window.location.pathname);
-                  window.dispatchEvent(new PopStateEvent('popstate'));
-                }} className="w-full">
-                  <RefreshCw className="mr-2 h-4 w-4" />
-                  Apenas Recarregar
+                <Button variant="outline" onClick={() => window.location.reload()} className="w-full">
+                  Recarregar Página
                 </Button>
               </div>
 

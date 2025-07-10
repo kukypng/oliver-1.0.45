@@ -6,11 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AuthProvider } from "@/hooks/useAuth";
-import { useIOSOptimizations } from "@/hooks/useIOSOptimizations";
-import { useErrorRecovery } from "@/hooks/useErrorRecovery";
-import { useIOSScreenFix } from "@/hooks/useIOSScreenFix";
-import { IOSWebAppBadge } from "@/components/IOSWebAppBadge";
-import { IOSLayoutWrapper } from "@/components/IOSLayoutWrapper";
 import Index from "./pages/Index";
 import { AuthPage } from "./pages/AuthPage";
 import { SignUpPage } from "./pages/SignUpPage";
@@ -24,7 +19,6 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import { ResetEmailPage } from "./pages/ResetEmailPage";
 import { VerifyPage } from "./pages/VerifyPage";
-import { BudgetsPage } from "./pages/BudgetsPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -51,22 +45,8 @@ const queryClient = new QueryClient({
   },
 });
 
-const AppContent = () => {
-  useErrorRecovery({
-    clearCacheOnAuthError: true,
-    clearCacheOnNetworkError: true,
-    clearLocalStorageOnCriticalError: true,
-  });
-
-  // iOS screen fix for black screen issue
-  useIOSScreenFix({
-    enableViewportFix: true,
-    enableColorFix: true,
-    enableSafeAreaFix: true,
-    enablePreventLoop: true,
-  });
-
-  return (
+const App = () => (
+  <QueryClientProvider client={queryClient}>
     <ThemeProvider
       attribute="class"
       defaultTheme="dark"
@@ -77,24 +57,22 @@ const AppContent = () => {
         <ErrorBoundary>
           <BrowserRouter>
             <AuthProvider>
-              <IOSLayoutWrapper>
-                <Toaster />
-                <Sonner 
-                  position="top-right"
-                  expand={false}
-                  richColors
-                  closeButton
-                  duration={4000}
-                  toastOptions={{
-                    style: {
-                      background: 'hsl(var(--background))',
-                      color: 'hsl(var(--foreground))',
-                      border: '1px solid hsl(var(--border))',
-                    },
-                  }}
-                />
-                <IOSWebAppBadge />
-                <Routes>
+              <Toaster />
+              <Sonner 
+                position="top-right"
+                expand={false}
+                richColors
+                closeButton
+                duration={4000}
+                toastOptions={{
+                  style: {
+                    background: 'hsl(var(--background))',
+                    color: 'hsl(var(--foreground))',
+                    border: '1px solid hsl(var(--border))',
+                  },
+                }}
+              />
+              <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<AuthPage />} />
                 <Route path="/plans" element={<PlansPage />} />
@@ -114,34 +92,15 @@ const AppContent = () => {
                   element={<SignUpPage />}
                 />
                 <Route path="/dashboard/*" element={<Dashboard />} />
-                <Route
-                  path="/budgets"
-                  element={
-                    <ProtectedRoute>
-                      <BudgetsPage />
-                    </ProtectedRoute>
-                  }
-                />
                 <Route path="/cookie" element={<CookiePage />} />
                 <Route path="*" element={<NotFound />} />
-                </Routes>
-              </IOSLayoutWrapper>
+              </Routes>
             </AuthProvider>
           </BrowserRouter>
         </ErrorBoundary>
       </TooltipProvider>
     </ThemeProvider>
-  );
-};
-
-const App = () => {
-  useIOSOptimizations();
-  
-  return (
-    <QueryClientProvider client={queryClient}>
-      <AppContent />
-    </QueryClientProvider>
-  );
-};
+  </QueryClientProvider>
+);
 
 export default App;

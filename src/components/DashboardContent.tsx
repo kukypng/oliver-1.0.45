@@ -86,11 +86,7 @@ export const DashboardContent = ({ onTabChange }: DashboardContentProps) => {
           description="Não foi possível carregar os dados do dashboard. Tente novamente."
           action={{
             label: "Tentar Novamente",
-            onClick: () => {
-              // iOS-safe reload
-              window.history.pushState({}, '', window.location.pathname);
-              window.dispatchEvent(new PopStateEvent('popstate'));
-            }
+            onClick: () => window.location.reload()
           }}
         />
       </div>
