@@ -36,21 +36,12 @@ const getSafeArea = () => {
     return { top: 0, bottom: 0, left: 0, right: 0 };
   }
 
-  // CSS environment variables for safe area
   const computedStyle = getComputedStyle(document.documentElement);
-  
-  // Try both env() and constant() for older iOS versions
-  const getInset = (property: string) => {
-    const envValue = computedStyle.getPropertyValue(`env(${property})`);
-    const constantValue = computedStyle.getPropertyValue(`constant(${property})`);
-    return parseInt(envValue || constantValue || '0');
-  };
-
   return {
-    top: getInset('safe-area-inset-top'),
-    bottom: getInset('safe-area-inset-bottom'),
-    left: getInset('safe-area-inset-left'),
-    right: getInset('safe-area-inset-right'),
+    top: parseInt(computedStyle.getPropertyValue('env(safe-area-inset-top)') || '0'),
+    bottom: parseInt(computedStyle.getPropertyValue('env(safe-area-inset-bottom)') || '0'),
+    left: parseInt(computedStyle.getPropertyValue('env(safe-area-inset-left)') || '0'),
+    right: parseInt(computedStyle.getPropertyValue('env(safe-area-inset-right)') || '0'),
   };
 };
 

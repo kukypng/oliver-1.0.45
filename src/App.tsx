@@ -6,8 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AuthProvider } from "@/hooks/useAuth";
-import { useIOSOptimizations } from "@/hooks/useIOSOptimizations";
-import { IOSWebAppBadge } from "@/components/IOSWebAppBadge";
 import Index from "./pages/Index";
 import { AuthPage } from "./pages/AuthPage";
 import { SignUpPage } from "./pages/SignUpPage";
@@ -21,7 +19,6 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import { ResetEmailPage } from "./pages/ResetEmailPage";
 import { VerifyPage } from "./pages/VerifyPage";
-import { BudgetsPage } from "./pages/BudgetsPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -48,11 +45,8 @@ const queryClient = new QueryClient({
   },
 });
 
-const App = () => {
-  useIOSOptimizations();
-  
-  return (
-    <QueryClientProvider client={queryClient}>
+const App = () => (
+  <QueryClientProvider client={queryClient}>
     <ThemeProvider
       attribute="class"
       defaultTheme="dark"
@@ -78,7 +72,6 @@ const App = () => {
                   },
                 }}
               />
-              <IOSWebAppBadge />
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<AuthPage />} />
@@ -99,14 +92,6 @@ const App = () => {
                   element={<SignUpPage />}
                 />
                 <Route path="/dashboard/*" element={<Dashboard />} />
-                <Route
-                  path="/budgets"
-                  element={
-                    <ProtectedRoute>
-                      <BudgetsPage />
-                    </ProtectedRoute>
-                  }
-                />
                 <Route path="/cookie" element={<CookiePage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
@@ -116,7 +101,6 @@ const App = () => {
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
-  );
-};
+);
 
 export default App;
